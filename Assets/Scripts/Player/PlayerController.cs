@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Eyelids")]
     [SerializeField] Animator eyelidsAnimator;
-    bool eyelidsShut = false;
 
     // Start is called before the first frame update
     void Start()
@@ -46,16 +45,10 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse2))
         {
-            eyelidsShut = true;
             eyelidsAnimator.SetBool("eyelidsShut", true);
-
-            Debug.Log("Eyelids shut!");
         }
         else if (Input.GetKeyUp(KeyCode.Mouse2))
         {
-            eyelidsShut = false;
-
-            Debug.Log("Eyelids open!");
             eyelidsAnimator.SetBool("eyelidsShut", false);
         }
 
