@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    bool cursorVisible = false;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -12,7 +14,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SetCursor(!Cursor.visible);
+            SetCursor(!cursorVisible);
         }
     }
 
@@ -21,5 +23,6 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = visible;
+        cursorVisible = visible;
     }
 }
