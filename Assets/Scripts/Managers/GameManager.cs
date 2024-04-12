@@ -1,13 +1,26 @@
+using System;
 using UnityEngine;
+
+[Serializable]
+public class Place
+{
+    public string Name;
+    public Vector3 Position;
+}
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] Place[] places;
+    public static Place[] Places { get; private set; }
+
     bool cursorVisible = false;
 
     // Start is called before the first frame update
     void Awake()
     {
         SetCursor(false);
+
+        Places = places;
     }
 
     void Update()

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     [Header("Eyelids")]
     [SerializeField] Animator eyelidsAnimator;
 
+    Place currentPlace;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +31,7 @@ public class PlayerController : MonoBehaviour
     {
         MouseControl();
         EyelidsControl();
+        Interact();
     }
 
     void MouseControl()
@@ -54,5 +58,32 @@ public class PlayerController : MonoBehaviour
 
         //eyelidsShut = Input.GetKey(KeyCode.Mouse2);
         //eyelidsAnimator.SetBool("eyelidsShut", eyelidsShut);
+    }
+
+    void Interact()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (Physics.Raycast(camera.position, camera.forward, out RaycastHit hit, Mathf.Infinity))
+            {
+                if (hit.collider.TryGetComponent(out PlaceTrigger trigger))
+                {
+                    foreach (Place place in GameManager.Places)
+                    {
+                        if (place.Name == trigger.placeName)
+                        {
+                            currentPlace = place;
+                            MoveToPlace(place);
+                            break;
+                        }
+                    }
+                }
+            }  
+        }
+    }
+
+    void MoveToPlace(Place place)
+    {
+        transform.position = place.Position;
     }
 }
