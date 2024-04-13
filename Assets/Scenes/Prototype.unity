@@ -658,16 +658,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   places:
   - Name: Default
+    Color: {r: 1, g: 1, b: 1, a: 1}
     Transform: {fileID: 1735019096}
   - Name: Left Door
+    Color: {r: 0.09011213, g: 0.305311, b: 0.764151, a: 1}
     Transform: {fileID: 1961275560}
   - Name: Right Door
+    Color: {r: 0.8396226, g: 0.70546633, b: 0.1782218, a: 1}
     Transform: {fileID: 645503620}
   - Name: Closet
+    Color: {r: 0.8018868, g: 0.13238695, b: 0.13238695, a: 1}
     Transform: {fileID: 1930769723}
   - Name: On Bed
+    Color: {r: 0.5660378, g: 0.32594457, b: 0.16286935, a: 1}
     Transform: {fileID: 47711025}
   - Name: Under Bed
+    Color: {r: 0.2924528, g: 0.1249391, b: 0.062077258, a: 1}
     Transform: {fileID: 212489422}
 --- !u!1 &212489421
 GameObject:
@@ -2435,6 +2441,7 @@ GameObject:
   - component: {fileID: 1084084525}
   - component: {fileID: 1084084527}
   - component: {fileID: 1084084526}
+  - component: {fileID: 1084084528}
   m_Layer: 5
   m_Name: Player Place
   m_TagString: Untagged
@@ -2501,6 +2508,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084084524}
   m_CullTransparentMesh: 1
+--- !u!114 &1084084528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084084524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7eaee60cc8b6574c9f2b3c04be51185, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: {fileID: 1843721547}
 --- !u!1001 &1117786531
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Place
 {
     public string Name;
+    public Color Color;
     public Transform Transform;
 }
 

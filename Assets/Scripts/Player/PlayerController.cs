@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [Header("Eyelids")]
     [SerializeField] Animator eyelidsAnimator;
 
+    public static Place currentPlace {  get; private set; }
     PlaceTrigger currentPlaceTrigger;
     Door currentDoor;
 
@@ -78,6 +79,7 @@ public class PlayerController : MonoBehaviour
                             if (currentDoor != null) currentDoor.Toggle(false);
                             currentDoor = null;
 
+                            currentPlace = place;
                             currentPlaceTrigger = trigger;
                             currentPlaceTrigger.gameObject.SetActive(false);
 
