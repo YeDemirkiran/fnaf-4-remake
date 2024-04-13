@@ -5,7 +5,7 @@ using UnityEngine;
 public class Place
 {
     public string Name;
-    public Vector3 Position;
+    public Transform Transform;
 }
 
 public class GameManager : MonoBehaviour

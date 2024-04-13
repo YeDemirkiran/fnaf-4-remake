@@ -15,7 +15,8 @@ public class PlayerController : MonoBehaviour
     [Header("Eyelids")]
     [SerializeField] Animator eyelidsAnimator;
 
-    Place currentPlace;
+    PlaceTrigger currentPlaceTrigger;
+    Door currentDoor;
 
     // Start is called before the first frame update
     void Start()
@@ -72,11 +73,24 @@ public class PlayerController : MonoBehaviour
                     {
                         if (place.Name == trigger.placeName)
                         {
-                            currentPlace = place;
+                            if (currentPlaceTrigger != null) currentPlaceTrigger.gameObject.SetActive(true);
+
+                            if (currentDoor != null) currentDoor.Toggle(false);
+                            currentDoor = null;
+
+                            currentPlaceTrigger = trigger;
+                            currentPlaceTrigger.gameObject.SetActive(false);
+
                             MoveToPlace(place);
                             break;
                         }
                     }
+                }
+                else if (hit.collider.TryGetComponent(out Door door))
+                {
+                    currentDoor = door;
+                    door.Toggle(!door.isOpen);
+                    Debug.Log("Interact with door");
                 }
             }  
         }
@@ -84,6 +98,6 @@ public class PlayerController : MonoBehaviour
 
     void MoveToPlace(Place place)
     {
-        transform.position = place.Position;
+        transform.position = place.Transform.position;
     }
 }

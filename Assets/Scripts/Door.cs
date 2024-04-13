@@ -3,16 +3,35 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-    [SerializeField] Vector3 openRotation, closedRotation;
-    [SerializeField] float openTime = 0.25f;
+    public enum DoorType { Hinge, Slide }
+    [SerializeField] DoorType type;
 
-    public void Open()
+    [SerializeField] Vector3 openRotation, closedRotation; // For hinge doors
+    [SerializeField] Vector3 openPosition, closedPosition; // For slide doors
+    [SerializeField] float moveTime = 0.25f;
+
+    public bool isOpen { get; private set; }
+
+    private void Awake()
     {
-        transform.DORotate(openRotation, openTime, RotateMode.Fast);
+        Toggle(false);
     }
 
-    public void Close()
+    public void Toggle(bool state, float time = -1f)
     {
-        transform.DORotate(closedRotation, openTime, RotateMode.Fast);
+        if (time < 0f)
+        {
+            time = moveTime;
+        }
+
+        if (type == DoorType.Hinge)
+        {
+            transform.DORotate(state ? openRotation : closedRotation, time, RotateMode.Fast);
+        }
+        else
+        {
+            transform.DOMove(state ? openPosition : closedPosition, time);
+        }
+        isOpen = state;
     }
 }
