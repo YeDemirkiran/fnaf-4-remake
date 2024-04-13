@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
                 {
                     currentDoor = door;
                     door.Toggle(!door.isOpen);
-                    Debug.Log("Interact with door");
+                    //Debug.Log("Interact with door");
                 }
             }  
         }
