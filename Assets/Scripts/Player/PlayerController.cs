@@ -1,9 +1,12 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public bool isOn {  get; private set; }
+
     // Public settings, will be adjustable from the game settings
     public Vector2 mouseSensitivity;
     public Vector2 yClamp;
@@ -22,6 +25,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetControlState(true);
+
         playerEuler = transform.localEulerAngles;
         cameraEuler = camera.localEulerAngles;
 
@@ -31,9 +36,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseControl();
-        EyelidsControl();
-        Interact();
+        if (isOn)
+        {
+            MouseControl();
+            EyelidsControl();
+            Interact();
+        }
+    }
+
+    public void SetControlState(bool state)
+    {
+        isOn = state;
     }
 
     void MouseControl()
@@ -100,6 +113,32 @@ public class PlayerController : MonoBehaviour
 
     void MoveToPlace(Place place)
     {
+        StopAllCoroutines();
+        StartCoroutine(IEMoveToPlace(place));
+    }
+
+    IEnumerator IEMoveToPlace(Place place, float waitTime = 1f)
+    {
+        SetControlState(false);
+
+        float timer = 0f;
+
+        while (timer < 1f)
+        {
+            timer += Time.deltaTime;
+
+            // Animation will be here, replace this stuff
+            UIManager.Instance.playerActionPanel.SetActive(true);
+            UIManager.Instance.playerActionText.text = "Moving to " + place.Name + ", animation playing"; 
+
+            yield return null;
+        }
+
         transform.position = place.Transform.position;
+
+        UIManager.Instance.playerActionPanel.SetActive(false);
+        UIManager.Instance.playerActionText.text = "";
+
+        SetControlState(true);
     }
 }
