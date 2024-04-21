@@ -337,7 +337,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08ae069e63cc75944a960f3afe299aea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nightSpeed: 60
+  nightLengthInGame: 1
+  nightLengthRealLife: 1
 --- !u!1 &119986385
 GameObject:
   m_ObjectHideFlags: 0

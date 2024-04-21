@@ -6,7 +6,8 @@ public class NightManager : MonoBehaviour
     public byte currentNight { get; private set; } = 0; // 0 is prototype
 
     public float currentTime { get; private set; } = 0f;
-    public float nightSpeed = 60f; // Value 1 is identical to real life. Make it 60 to make 1 Hour = 1 Minute IRL
+    [Tooltip("In hours")] public float nightLengthInGame = 6f; // In hours
+    [Tooltip("In minutes")] public float nightLengthRealLife = 9f; // In minutes
 
     TMP_Text debugHourText;
 
@@ -17,10 +18,10 @@ public class NightManager : MonoBehaviour
 
     void Update()
     {
-        currentTime += Time.deltaTime * nightSpeed;
+        currentTime += Time.deltaTime * (nightLengthInGame * 3600f / (nightLengthRealLife * 60f));
 
         byte minute = (byte)((currentTime / 60f) % 60f);
-        byte hour = (byte)((currentTime / 3600f) % 12f);
+        byte hour = (byte)((currentTime / 3600f) % nightLengthInGame);
 
         string minuteString;
         string hourString;
