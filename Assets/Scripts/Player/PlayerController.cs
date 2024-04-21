@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
     public bool isOn {  get; private set; }
 
     // Public settings, will be adjustable from the game settings
@@ -21,6 +23,11 @@ public class PlayerController : MonoBehaviour
     public static Place currentPlace {  get; private set; }
     PlaceTrigger currentPlaceTrigger;
     Door currentDoor;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using DG.Tweening;
 
 [Serializable]
 public class Place
@@ -11,17 +12,32 @@ public class Place
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     [SerializeField] Place[] places;
     public static Place[] Places { get; private set; }
 
     bool cursorVisible = false;
 
+    // References
+    UIManager uiManager;
+    Tweener currentTweener;
+
     // Start is called before the first frame update
     void Awake()
     {
+        Instance = this;
+
+        DontDestroyOnLoad(gameObject);
+
         SetCursor(false);
 
         Places = places;
+    }
+
+    private void Start()
+    {
+        uiManager = UIManager.Instance;
     }
 
     void Update()
@@ -38,5 +54,37 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = visible ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = visible;
         cursorVisible = visible;
+    }
+
+    public void GameFadeIn(float duration, bool enablePlayerController = true)
+    {
+        if (currentTweener != null)
+        {
+            currentTweener.Kill();
+            currentTweener = null;
+        }
+
+        PlayerController.Instance.SetControlState(enablePlayerController);
+
+        Color colorTransparent = new Color(0f, 0f, 0f, 0f);
+        Color colorVisible = new Color(0f, 0f, 0f, 1f);
+
+        currentTweener = DOVirtual.Color(colorVisible, colorTransparent, duration, (value) => { uiManager.overlay.color = value; });
+    }
+
+    public void GameFadeOut(float duration, bool disablePlayerController = true)
+    {
+        if (currentTweener != null)
+        {
+            currentTweener.Kill();
+            currentTweener = null;
+        }
+
+        PlayerController.Instance.SetControlState(!disablePlayerController);
+
+        Color colorTransparent = new Color(0f, 0f, 0f, 0f);
+        Color colorVisible = new Color(0f, 0f, 0f, 1f);
+
+        currentTweener = DOVirtual.Color(colorTransparent, colorVisible, duration, (value) => { uiManager.overlay.color = value; });
     }
 }
