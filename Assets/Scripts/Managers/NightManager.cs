@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class NightManager : MonoBehaviour
 {
+    public static NightManager Instance;
+
     public byte currentNight { get; private set; } = 0; // 0 is prototype
 
     public float currentTime { get; private set; } = 0f;
@@ -10,6 +12,11 @@ public class NightManager : MonoBehaviour
     [Tooltip("In minutes")] public float nightLengthRealLife = 9f; // In minutes
 
     TMP_Text debugHourText;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     private void Start()
     {
