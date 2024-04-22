@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
 
+        transform.parent = null;
         DontDestroyOnLoad(gameObject);
 
         SetCursor(false);
@@ -38,6 +39,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         uiManager = UIManager.Instance;
+
+        GameFadeIn(2f);
     }
 
     void Update()

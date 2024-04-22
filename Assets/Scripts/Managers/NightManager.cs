@@ -9,6 +9,9 @@ public class NightManager : MonoBehaviour
     bool nightComplete = false;
 
     public float currentTime { get; private set; } = 0f;
+    public int currentHour { get { return (int)(currentTime / 3600f); } }
+    public int currentMinute { get { return (int)(currentTime / 60f % 60f); } }
+
     [Tooltip("In hours")] public float nightLengthInGame = 6f; // In hours
     [Tooltip("In minutes")] public float nightLengthRealLife = 9f; // In minutes
 
