@@ -126,7 +126,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator IEMoveToPlace(Place place, float waitTime = 1f)
     {
-        GameManager.Instance.GameFadeOut(0.2f);
+        SetControlState(false);
 
         float timer = 0f;
 
@@ -146,6 +146,6 @@ public class PlayerController : MonoBehaviour
         UIManager.Instance.playerActionPanel.SetActive(false);
         UIManager.Instance.playerActionText.text = "";
 
-        GameManager.Instance.GameFadeIn(1f);
+        SetControlState(true);
     }
 }
