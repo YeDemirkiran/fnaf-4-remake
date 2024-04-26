@@ -8,6 +8,7 @@ public class Place
     public string Name;
     public Color Color;
     public Transform Transform;
+    public Animatronic animatronic;
 }
 
 public class GameManager : MonoBehaviour
@@ -34,6 +35,14 @@ public class GameManager : MonoBehaviour
         SetCursor(false);
 
         Places = places;
+
+        foreach (var place in Places)
+        {
+            if (place.animatronic != null)
+            {
+                place.animatronic.animatronicPlace = place;
+            }
+        }
     }
 
     private void Start()

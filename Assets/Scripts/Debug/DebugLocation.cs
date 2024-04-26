@@ -10,10 +10,10 @@ public class DebugLocation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PlayerController.currentPlace != null)
+        if (PlayerController.Instance.currentPlace != null)
         {
-            text.text = PlayerController.currentPlace.Name;
-            text.color = PlayerController.currentPlace.Color;
+            text.text = PlayerController.Instance.currentPlace.Name;
+            text.color = PlayerController.Instance.currentPlace.Color;
         }
         else
         {

@@ -19,6 +19,8 @@ public class Door : MonoBehaviour
 
     public void Toggle(bool state, float time = -1f)
     {
+        isOpen = state;
+
         if (time < 0f)
         {
             time = moveTime;
@@ -31,7 +33,6 @@ public class Door : MonoBehaviour
         else
         {
             transform.DOMove(state ? openPosition : closedPosition, time);
-        }
-        isOpen = state;
+        }   
     }
 }

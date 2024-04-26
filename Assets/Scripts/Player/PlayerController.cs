@@ -14,13 +14,14 @@ public class PlayerController : MonoBehaviour
     public Vector2 yClamp;
     
     [SerializeField] new Transform camera;
+    [SerializeField] Flashlight flashlight;
 
     Vector3 playerEuler, cameraEuler;
 
     [Header("Eyelids")]
     [SerializeField] Animator eyelidsAnimator;
 
-    public static Place currentPlace {  get; private set; }
+    public Place currentPlace {  get; private set; }
     PlaceTrigger currentPlaceTrigger;
     Door currentDoor;
 
@@ -36,6 +37,36 @@ public class PlayerController : MonoBehaviour
 
         playerEuler = transform.localEulerAngles;
         cameraEuler = camera.localEulerAngles;
+
+        flashlight.onTurnOn += () => 
+        { 
+            //Debug.Log("Flashlight turned on");
+
+            if (currentPlace != null && currentDoor != null && currentPlace.animatronic != null)
+            //if (currentPlace.Name != "Default")
+            {
+                if (currentDoor.isOpen)
+                {
+                    if (currentPlace.animatronic.atLastPhase)
+                    {
+                        currentPlace.animatronic.Jumpscare();
+                    }
+                    else
+                    {
+                        currentPlace.animatronic.ResetJumpscare();
+                    }
+                }
+            }
+            //else
+            //{
+            //    Debug.Log("Can't");
+            //}
+        };
+
+        flashlight.onTurnOff += () =>
+        {
+            //Debug.Log("Flashlight turned off");
+        };
 
         //Time.timeScale = 0.1f;
     }
@@ -96,7 +127,7 @@ public class PlayerController : MonoBehaviour
                         {
                             if (currentPlaceTrigger != null) currentPlaceTrigger.gameObject.SetActive(true);
 
-                            if (currentDoor != null) currentDoor.Toggle(false);
+                            if (currentDoor != null) currentDoor.Toggle(true);
                             currentDoor = null;
 
                             currentPlace = place;
@@ -112,6 +143,11 @@ public class PlayerController : MonoBehaviour
                 {
                     currentDoor = door;
                     door.Toggle(!door.isOpen);
+
+                    if (!door.isOpen && currentPlace.animatronic.atLastPhase)
+                    {
+                        currentPlace.animatronic.ResetJumpscare();
+                    }
                     //Debug.Log("Interact with door");
                 }
             }  
@@ -127,6 +163,8 @@ public class PlayerController : MonoBehaviour
     IEnumerator IEMoveToPlace(Place place, float waitTime = 1f)
     {
         SetControlState(false);
+
+        flashlight.TurnLight(false);
 
         float timer = 0f;
 
@@ -147,5 +185,15 @@ public class PlayerController : MonoBehaviour
         UIManager.Instance.playerActionText.text = "";
 
         SetControlState(true);
+    }
+
+    public void FlashlightJumpscare()
+    {
+        
+
+        //if (currentPlace != null && currentPlace.animatronic != null && currentPlace.animatronic.atLastPhase) // At the door or under the bed, whatever it's doing
+        //{
+        //    currentPlace.animatronic.Jumpscare();
+        //}
     }
 }

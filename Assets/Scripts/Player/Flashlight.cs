@@ -1,24 +1,28 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Flashlight : MonoBehaviour
 {
     [SerializeField] new Transform camera;
     [SerializeField][Range(0f, 1f)] float cameraFollowSpeed = 0.5f;
     public KeyCode flashlightKey = KeyCode.Mouse1;
-    bool lightOpen = true;
+    public bool lightOpen { get { return light.enabled; } }
     [SerializeField] float xOffset, yOffset, zOffset;
     new Light light;
 
-    // Start is called before the first frame update
+    public UnityAction onTurnOn, onTurnOff;
+
     void Awake()
     {
-        light = GetComponentInChildren<Light>();
-        //posOffset = transform.position - (camera.position + camera.forward);
 
+        light = GetComponentInChildren<Light>();
+    }
+
+    void Start()
+    {
         TurnLight(lightOpen);
     }
 
-    // Update is called once per frame
     void Update()
     {
         TrackCamera();
@@ -42,6 +46,11 @@ public class Flashlight : MonoBehaviour
     public void TurnLight(bool state)
     {
         light.enabled = state;
-        lightOpen = state;
+
+        if (onTurnOn != null && onTurnOff != null)
+        {
+            if (state) onTurnOn.Invoke();
+            else onTurnOff.Invoke();
+        }
     }
 }
