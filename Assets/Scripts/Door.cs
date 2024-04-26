@@ -14,7 +14,7 @@ public class Door : MonoBehaviour
 
     private void Awake()
     {
-        Toggle(false);
+        Toggle(true);
     }
 
     public void Toggle(bool state, float time = -1f)

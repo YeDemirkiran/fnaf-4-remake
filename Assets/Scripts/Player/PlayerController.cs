@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 yClamp;
     
     [SerializeField] new Transform camera;
-    [SerializeField] Flashlight flashlight;
+    public Flashlight flashlight;
 
     Vector3 playerEuler, cameraEuler;
 
@@ -22,8 +22,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator eyelidsAnimator;
 
     public Place currentPlace {  get; private set; }
+    public Door currentDoor { get { return currentPlace.door; } }
     PlaceTrigger currentPlaceTrigger;
-    Door currentDoor;
 
     private void Awake()
     {
@@ -42,20 +42,20 @@ public class PlayerController : MonoBehaviour
         { 
             //Debug.Log("Flashlight turned on");
 
-            if (currentPlace != null && currentDoor != null && currentPlace.animatronic != null)
+            if (currentPlace != null && currentPlace.door != null && currentPlace.animatronic != null)
             //if (currentPlace.Name != "Default")
             {
-                if (currentDoor.isOpen)
-                {
-                    if (currentPlace.animatronic.atLastPhase)
-                    {
-                        currentPlace.animatronic.Jumpscare();
-                    }
-                    else
-                    {
-                        currentPlace.animatronic.ResetJumpscare();
-                    }
-                }
+                //if (currentDoor.isOpen)
+                //{
+                //    if (currentPlace.animatronic.atLastPhase)
+                //    {
+                //        currentPlace.animatronic.Jumpscare();
+                //    }
+                //    else
+                //    {
+                //        currentPlace.animatronic.ResetJumpscare();
+                //    }
+                //}
             }
             //else
             //{
@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
         {
             //Debug.Log("Flashlight turned off");
         };
+
+        currentPlace = GameManager.Places[0]; // Ensure that the default place is at index 0
 
         //Time.timeScale = 0.1f;
     }
@@ -128,7 +130,7 @@ public class PlayerController : MonoBehaviour
                             if (currentPlaceTrigger != null) currentPlaceTrigger.gameObject.SetActive(true);
 
                             if (currentDoor != null) currentDoor.Toggle(true);
-                            currentDoor = null;
+                            //currentPlace.door = null;
 
                             currentPlace = place;
                             currentPlaceTrigger = trigger;
@@ -139,16 +141,14 @@ public class PlayerController : MonoBehaviour
                         }
                     }
                 }
-                else if (hit.collider.TryGetComponent(out Door door))
+                else if(currentPlace.door != null)
                 {
-                    currentDoor = door;
-                    door.Toggle(!door.isOpen);
+                    currentDoor.Toggle(!currentDoor.isOpen);
 
-                    if (!door.isOpen && currentPlace.animatronic.atLastPhase)
+                    if (!currentDoor.isOpen && currentPlace.animatronic.atLastPhase)
                     {
                         currentPlace.animatronic.ResetJumpscare();
                     }
-                    //Debug.Log("Interact with door");
                 }
             }  
         }
@@ -185,15 +185,5 @@ public class PlayerController : MonoBehaviour
         UIManager.Instance.playerActionText.text = "";
 
         SetControlState(true);
-    }
-
-    public void FlashlightJumpscare()
-    {
-        
-
-        //if (currentPlace != null && currentPlace.animatronic != null && currentPlace.animatronic.atLastPhase) // At the door or under the bed, whatever it's doing
-        //{
-        //    currentPlace.animatronic.Jumpscare();
-        //}
     }
 }

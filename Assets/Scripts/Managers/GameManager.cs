@@ -8,6 +8,8 @@ public class Place
     public string Name;
     public Color Color;
     public Transform Transform;
+
+    public Door door;
     public Animatronic animatronic;
 }
 

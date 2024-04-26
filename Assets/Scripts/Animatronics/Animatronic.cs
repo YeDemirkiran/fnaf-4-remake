@@ -24,9 +24,9 @@ public class Animatronic : MonoBehaviour
     Vector3 movingProbabilities;
 
     [SerializeField] Vector2 jumpscareWaitMinMax; // How much time should it wait in the door before jumpscaring
-    float jumpscareTimer = 0f, currentJumpscareTime = -1f;
+    float jumpscareTimer = -1f, currentJumpscareTime = -1f;
 
-    public bool atLastPhase { get { return currentJumpscareTime != 1f; } }
+    public bool atLastPhase { get { return currentJumpscareTime != -1f; } }
 
     // Start is called before the first frame update
     protected void Initialize()
@@ -45,81 +45,92 @@ public class Animatronic : MonoBehaviour
     // Update is called once per frame
     protected void AnimatronicLoop()
     {
-        if (currentActionTime <= actionTimer)
+        bool playerAtDoor = PlayerController.Instance.currentPlace == animatronicPlace;
+        bool playerLightOpen = PlayerController.Instance.flashlight.lightOpen;
+        bool placeDoorOpen = animatronicPlace.door.isOpen;
+
+        bool playerArmedAtDoor = playerAtDoor &&
+                        playerLightOpen
+                        && placeDoorOpen; // If the player is at this animatronics' door while the door is open and the light is on
+
+        //Debug.Log("Player armed at door: " + (jumpscareTimer > currentJumpscareTime || playerArmedAtDoor));
+
+        if (paths.Length <= currentPlaceIndex + 1) // If the animatronic is at the door. Last transform in the path should be ALWAYS the door.
         {
-            if (paths.Length <= currentPlaceIndex + 1) // If at the door. Last place should be ALWAYS the door.
+            //Debug.Log("0");
+
+            if (currentJumpscareTime == -1f)
             {
-                if (currentJumpscareTime == -1f)
-                {
-                    currentJumpscareTime = Random.Range(jumpscareWaitMinMax.x, jumpscareWaitMinMax.y);
-                    //Debug.Log("Jumpscare mode initiated");
-                }
+                //Debug.Log("0.01");
 
-                if (jumpscareTimer < currentJumpscareTime)
-                {
-                    jumpscareTimer += Time.deltaTime;
-                }
-                else
-                {
-                    if (PlayerController.Instance.currentPlace == animatronicPlace)
-                    {
-
-                    }
-                    // Jumpscare baby
-                    Jumpscare();
-                }
+                currentJumpscareTime = Random.Range(jumpscareWaitMinMax.x, jumpscareWaitMinMax.y);
+                jumpscareTimer = 0f;
+                //Debug.Log("Jumpscare mode initiated");
             }
-            else // Not at the door, proceed.
+
+            if (playerArmedAtDoor || jumpscareTimer > currentJumpscareTime) // If too much time passed before player could reset the animatronic or if the player turned on the light directly at the animatronic's face (dumbass)
             {
-                // Action
-                float action = Random.Range(0f, 1f) * 100f;
-
-                //Debug.Log("Prob: " + action);
-
-                if (action < movingProbabilities.x)
-                {
-                    //Debug.Log("Bonnie going forward");
-
-                    currentPlaceIndex += 1;
-
-                }
-                else if (action < movingProbabilities.x + movingProbabilities.y)
-                {
-                    //Debug.Log("Bonnie going backward");
-                    currentPlaceIndex -= 1;             
-                }
-                else
-                {
-                    //Debug.Log("Bonnie staying");
-                }
-
-                currentPlaceIndex = Mathf.Clamp(currentPlaceIndex, 0, paths.Length);
-
-                transform.position = paths[currentPlaceIndex].position;
-
-                //Debug.Log("Time taken: " + actionTimer);
-
-                // Reset timer
-                currentActionTime = Random.Range(actionTimeMinMax.x, actionTimeMinMax.y);
-                actionTimer = 0f;
+                Jumpscare();
+                //Debug.Log("2");
+            }
+            else
+            {
+                //Debug.Log("1");
+                jumpscareTimer += Time.deltaTime;
             }
         }
         else
         {
-            actionTimer += Time.deltaTime;
+            if (currentActionTime <= actionTimer)
+            {
+                if (!playerArmedAtDoor) // Can't move if the player is at the door with flashlight open
+                {
+                    // Action
+                    float action = Random.Range(0f, 1f) * 100f;
+
+                    //Debug.Log("Prob: " + action);
+
+                    if (action < movingProbabilities.x)
+                    {
+                        //Debug.Log("Bonnie going forward");
+
+                        currentPlaceIndex += 1;
+
+                    }
+                    else if (action < movingProbabilities.x + movingProbabilities.y)
+                    {
+                        //Debug.Log("Bonnie going backward");
+                        currentPlaceIndex -= 1;
+                    }
+                    else
+                    {
+                        //Debug.Log("Bonnie staying");
+                    }
+
+                    currentPlaceIndex = Mathf.Clamp(currentPlaceIndex, 0, paths.Length);
+
+                    transform.position = paths[currentPlaceIndex].position;
+
+                    //Debug.Log("Time taken: " + actionTimer);
+
+                    // Reset timer
+                    currentActionTime = Random.Range(actionTimeMinMax.x, actionTimeMinMax.y);
+                    actionTimer = 0f;
+                }
+                else
+                {
+                    ResetJumpscare();
+                }
+            }
+            else
+            {
+                actionTimer += Time.deltaTime;
+            }
         }
     }
 
     public void Jumpscare()
     {
-        //if (onlyIfAtDoor)
-        //{
-        //    if (PlayerController.Instance.currentPlace != animatronicPlace)
-        //    {
-        //        return;
-        //    }
-        //}
-
         Debug.Log("BOOO! Jumpscared");
         this.enabled = false;
         GameManager.Instance.GameFadeOut(2f);
@@ -127,8 +138,10 @@ public class Animatronic : MonoBehaviour
 
     public void ResetJumpscare()
     {
-        actionTimer = jumpscareTimer = 0f;
+        actionTimer = 0f;
+        jumpscareTimer = -1f;
         currentPlaceIndex = 0;
+        transform.position = paths[currentPlaceIndex].position;
         currentJumpscareTime = -1f;
     }
 }

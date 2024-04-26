@@ -718,7 +718,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &132401087
 Transform:
   m_ObjectHideFlags: 0
@@ -1054,30 +1054,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   places:
+  - Name: Default
+    Color: {r: 1, g: 1, b: 1, a: 1}
+    Transform: {fileID: 1735019096}
+    door: {fileID: 0}
+    animatronic: {fileID: 0}
   - Name: Left Door
     Color: {r: 0.19575472, g: 0.23098479, b: 0.7830189, a: 1}
     Transform: {fileID: 1961275560}
+    door: {fileID: 258026757}
     animatronic: {fileID: 1473590048}
   - Name: Closet
     Color: {r: 0.8207547, g: 0.12001601, b: 0.12001601, a: 1}
     Transform: {fileID: 1930769723}
+    door: {fileID: 1166410875}
     animatronic: {fileID: 1251625404}
   - Name: Right Door
     Color: {r: 0.7264151, g: 0.61840504, b: 0.16104485, a: 1}
     Transform: {fileID: 645503620}
+    door: {fileID: 414140542}
     animatronic: {fileID: 679254219}
   - Name: On Bed
     Color: {r: 0.4245283, g: 0.29579434, b: 0.1501869, a: 1}
     Transform: {fileID: 47711025}
+    door: {fileID: 0}
     animatronic: {fileID: 1852269935}
   - Name: Under Bed
     Color: {r: 0.31132078, g: 0.2096422, b: 0.110137075, a: 1}
     Transform: {fileID: 212489422}
+    door: {fileID: 0}
     animatronic: {fileID: 1852269935}
-  - Name: Default
-    Color: {r: 1, g: 1, b: 1, a: 1}
-    Transform: {fileID: 1735019096}
-    animatronic: {fileID: 0}
 --- !u!1 &212489421
 GameObject:
   m_ObjectHideFlags: 0
@@ -3656,7 +3662,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &671322207
 Transform:
   m_ObjectHideFlags: 0
@@ -5348,7 +5354,7 @@ Transform:
   m_GameObject: {fileID: 1043115358}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.109, y: 1.65, z: 2.329}
+  m_LocalPosition: {x: -6.109, y: 1.65, z: 3.368}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6419,7 +6425,7 @@ Transform:
   m_GameObject: {fileID: 1279638286}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.26, y: 1.65, z: 6.597}
+  m_LocalPosition: {x: -7.26, y: 1.65, z: 7.894}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6816,7 +6822,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1383245510
 Transform:
   m_ObjectHideFlags: 0
