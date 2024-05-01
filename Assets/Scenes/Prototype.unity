@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.32365286, g: 0.32365286, b: 0.32365286, a: 1}
+  m_AmbientSkyColor: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -1059,31 +1059,43 @@ MonoBehaviour:
     Transform: {fileID: 1735019096}
     door: {fileID: 0}
     animatronic: {fileID: 0}
+    xClamp: {x: -135, y: 135}
+    yClamp: {x: -30, y: 30}
   - Name: Left Door
     Color: {r: 0.19575472, g: 0.23098479, b: 0.7830189, a: 1}
     Transform: {fileID: 1961275560}
     door: {fileID: 258026757}
     animatronic: {fileID: 1473590048}
+    xClamp: {x: -45, y: 135}
+    yClamp: {x: -30, y: 15}
   - Name: Closet
     Color: {r: 0.8207547, g: 0.12001601, b: 0.12001601, a: 1}
     Transform: {fileID: 1930769723}
     door: {fileID: 1166410875}
     animatronic: {fileID: 1251625404}
+    xClamp: {x: 0, y: 0}
+    yClamp: {x: 0, y: 0}
   - Name: Right Door
     Color: {r: 0.7264151, g: 0.61840504, b: 0.16104485, a: 1}
     Transform: {fileID: 645503620}
     door: {fileID: 414140542}
     animatronic: {fileID: 679254219}
+    xClamp: {x: 0, y: 0}
+    yClamp: {x: 0, y: 0}
   - Name: On Bed
     Color: {r: 0.4245283, g: 0.29579434, b: 0.1501869, a: 1}
     Transform: {fileID: 47711025}
     door: {fileID: 0}
     animatronic: {fileID: 1852269935}
+    xClamp: {x: 0, y: 0}
+    yClamp: {x: 0, y: 0}
   - Name: Under Bed
     Color: {r: 0.31132078, g: 0.2096422, b: 0.110137075, a: 1}
     Transform: {fileID: 212489422}
     door: {fileID: 0}
     animatronic: {fileID: 1852269935}
+    xClamp: {x: 0, y: 0}
+    yClamp: {x: 0, y: 0}
 --- !u!1 &212489421
 GameObject:
   m_ObjectHideFlags: 0
@@ -1600,7 +1612,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 208670124}
-  - {fileID: 750398325}
   - {fileID: 109261995}
   - {fileID: 1794690383}
   m_Father: {fileID: 0}
@@ -2500,14 +2511,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 483345109}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 679254218}
   - {fileID: 132401087}
-  m_Father: {fileID: 750398325}
+  m_Father: {fileID: 746631104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &496159236
 GameObject:
@@ -3125,6 +3136,7 @@ Transform:
   - {fileID: 2005943208}
   - {fileID: 1604654278}
   - {fileID: 1811683544}
+  - {fileID: 591982860}
   - {fileID: 1972055569}
   m_Father: {fileID: 1998954744}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3394,8 +3406,8 @@ Transform:
   m_GameObject: {fileID: 591982856}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.691, z: 0}
-  m_LocalScale: {x: 2.3048868, y: 1.246333, z: 2.7381377}
+  m_LocalPosition: {x: 2.767, y: 1.709, z: -8.782}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 417613592}
@@ -3405,7 +3417,7 @@ Transform:
   - {fileID: 188414851}
   - {fileID: 355355208}
   - {fileID: 800290868}
-  m_Father: {fileID: 1972055569}
+  m_Father: {fileID: 551338132}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &591982861
 MonoBehaviour:
@@ -4121,43 +4133,12 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &750398324
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 750398325}
-  m_Layer: 0
-  m_Name: Animatronic Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &750398325
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 750398324}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1900247725}
   - {fileID: 908689190}
   - {fileID: 483345110}
   - {fileID: 1885994262}
-  m_Father: {fileID: 306697520}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &750600620
 GameObject:
@@ -4586,14 +4567,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 908689189}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1473590043}
   - {fileID: 214448513}
-  m_Father: {fileID: 750398325}
+  m_Father: {fileID: 746631104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &939622603
 GameObject:
@@ -6585,7 +6566,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: {x: 200, y: -150}
-  yClamp: {x: -30, y: 30}
+  smoothClamp: 1
+  smoothRatio: 0.6
   camera: {fileID: 330585546}
   flashlight: {fileID: 2029039937}
   eyelidsAnimator: {fileID: 683216522}
@@ -7152,7 +7134,7 @@ MonoBehaviour:
   difficulty: 1
   probabilityChangePerDifficulty: 2
   actionTimeMinMax: {x: 5, y: 6}
-  _movingProbabilities: {x: 90, y: 10}
+  _movingProbabilities: {x: 40, y: 10}
   jumpscareWaitMinMax: {x: 8, y: 10}
 --- !u!1 &1474908165
 GameObject:
@@ -8926,7 +8908,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.68, z: -7.46}
-  m_LocalScale: {x: 3, y: 0.44008, z: 5}
+  m_LocalScale: {x: 2.32422, y: 0.44008, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 551338132}
@@ -9408,14 +9390,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1885994261}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1251625403}
   - {fileID: 1383245510}
-  m_Father: {fileID: 750398325}
+  m_Father: {fileID: 746631104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1900247724
 GameObject:
@@ -9441,14 +9423,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1900247724}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1852269934}
   - {fileID: 671322207}
-  m_Father: {fileID: 750398325}
+  m_Father: {fileID: 746631104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1916218711
 GameObject:
@@ -9758,11 +9740,10 @@ Transform:
   m_GameObject: {fileID: 1972055568}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.767, y: 0.468, z: -8.439}
-  m_LocalScale: {x: 0.43386078, y: 0.8023538, z: 0.36521176}
+  m_LocalPosition: {x: 2.767, y: 0.7044, z: -9.22}
+  m_LocalScale: {x: 1.8795925, y: 1.7716522, z: 1.2029586}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 591982860}
+  m_Children: []
   m_Father: {fileID: 551338132}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1972055570

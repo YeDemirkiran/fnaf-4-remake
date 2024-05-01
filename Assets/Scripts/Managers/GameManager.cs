@@ -11,6 +11,8 @@ public class Place
 
     public Door door;
     public Animatronic animatronic;
+
+    public Vector2 xClamp, yClamp;
 }
 
 public class GameManager : MonoBehaviour

@@ -9,10 +9,19 @@ public class PlayerController : MonoBehaviour
 
     public bool isOn {  get; private set; }
 
+    
+
     // Public settings, will be adjustable from the game settings
     public Vector2 mouseSensitivity;
-    public Vector2 yClamp;
-    
+    Vector2 currentSensitivity;
+
+    public Vector2 xClamp {  get; set; }
+    public Vector2 yClamp { get; set; }
+
+    public bool smoothClamp = true;
+    [Range(0f, 1f)] public float smoothRatio = 0.10f; // 10 percent
+
+
     [SerializeField] new Transform camera;
     public Flashlight flashlight;
 
@@ -35,42 +44,15 @@ public class PlayerController : MonoBehaviour
     {
         SetControlState(true);
 
+        currentPlace = GameManager.Places[0]; // Ensure that the default place is at index 0
+
         playerEuler = transform.localEulerAngles;
         cameraEuler = camera.localEulerAngles;
 
-        flashlight.onTurnOn += () => 
-        { 
-            //Debug.Log("Flashlight turned on");
+        xClamp = currentPlace.xClamp;
+        yClamp = currentPlace.yClamp;
 
-            if (currentPlace != null && currentPlace.door != null && currentPlace.animatronic != null)
-            //if (currentPlace.Name != "Default")
-            {
-                //if (currentDoor.isOpen)
-                //{
-                //    if (currentPlace.animatronic.atLastPhase)
-                //    {
-                //        currentPlace.animatronic.Jumpscare();
-                //    }
-                //    else
-                //    {
-                //        currentPlace.animatronic.ResetJumpscare();
-                //    }
-                //}
-            }
-            //else
-            //{
-            //    Debug.Log("Can't");
-            //}
-        };
-
-        flashlight.onTurnOff += () =>
-        {
-            //Debug.Log("Flashlight turned off");
-        };
-
-        currentPlace = GameManager.Places[0]; // Ensure that the default place is at index 0
-
-        //Time.timeScale = 0.1f;
+        currentSensitivity = mouseSensitivity;
     }
 
     // Update is called once per frame
@@ -91,9 +73,81 @@ public class PlayerController : MonoBehaviour
 
     void MouseControl()
     {
-        playerEuler.y += Input.GetAxis("Mouse X") * mouseSensitivity.x * Time.deltaTime;
+        float inputX = Input.GetAxis("Mouse X");
+        float inputY = Input.GetAxis("Mouse Y");
 
-        cameraEuler.x += Input.GetAxis("Mouse Y") * mouseSensitivity.y * Time.deltaTime;
+
+        if (smoothClamp)
+        {          
+            float xLeftLimit = xClamp.x - xClamp.x * smoothRatio;
+            //Debug.Log("X left limit: " + xLeftLimit);
+            float xRightLimit = xClamp.y - xClamp.y * smoothRatio;
+            //Debug.Log("X right limit: " + xRightLimit);
+
+            float yUpLimit = yClamp.x - yClamp.x * smoothRatio;
+            //Debug.Log("Y up limit: " + yUpLimit);
+            float yDownLimit = yClamp.y - yClamp.y * smoothRatio;
+            //Debug.Log("Y down limit: " + yDownLimit);
+
+            //Debug.Log("Current X: " + playerEuler.y);
+            //Debug.Log("Current sensitivity x: " + currentSensitivity.x);
+            
+            //Debug.Log("Current Y: " + cameraEuler.x);
+            //Debug.Log("Current sensitivity Y: " + currentSensitivity.y);
+
+            // X-Axis (left - right)
+            if (playerEuler.y < 0f)
+            {
+                if (inputX < 0f)
+                {
+                    currentSensitivity.x = Mathf.Lerp(mouseSensitivity.x, 0f, Mathf.Clamp((playerEuler.y - xLeftLimit) / (xClamp.x - xLeftLimit), 0f, 1f));
+                }
+                else
+                {
+                    currentSensitivity.x = mouseSensitivity.x;
+                }
+            }
+            else
+            {
+                if (-inputX < 0f)
+                {
+                    currentSensitivity.x = Mathf.Lerp(mouseSensitivity.x, 0f, Mathf.Clamp((playerEuler.y - xRightLimit) / (xClamp.y - xRightLimit), 0f, 1f));
+                }
+                else
+                {
+                    currentSensitivity.x = mouseSensitivity.x;
+                }
+            }
+
+            // Y-Axis (up - down)
+            if (cameraEuler.x < 0f) // Camera is inverted. Negative means up, positive means down
+            {
+                if (-inputY < 0f)
+                {
+                    currentSensitivity.y = Mathf.Lerp(mouseSensitivity.y, 0f, Mathf.Clamp((cameraEuler.x - yUpLimit) / (yClamp.x - yUpLimit), 0f, 1f));
+                }
+                else
+                {
+                    currentSensitivity.y = mouseSensitivity.y;
+                }
+            }
+            else
+            {
+                if (inputX < 0f)
+                {
+                    currentSensitivity.y = Mathf.Lerp(mouseSensitivity.y, 0f, Mathf.Clamp((cameraEuler.x - yDownLimit) / (yClamp.y - yDownLimit), 0f, 1f));
+                }
+                else
+                {
+                    currentSensitivity.y = mouseSensitivity.y;
+                }
+            }
+        }
+
+        playerEuler.y += inputX * currentSensitivity.x * Time.deltaTime;
+        playerEuler.y = Mathf.Clamp(playerEuler.y, xClamp.x, xClamp.y);
+
+        cameraEuler.x += Input.GetAxis("Mouse Y") * currentSensitivity.y * Time.deltaTime;
         cameraEuler.x = Mathf.Clamp(cameraEuler.x, yClamp.x, yClamp.y);
 
         transform.localEulerAngles = playerEuler;
@@ -135,6 +189,9 @@ public class PlayerController : MonoBehaviour
                             currentPlace = place;
                             currentPlaceTrigger = trigger;
                             currentPlaceTrigger.gameObject.SetActive(false);
+
+                            xClamp = currentPlace.xClamp;
+                            yClamp = currentPlace.yClamp;
 
                             MoveToPlace(place);
                             break;
