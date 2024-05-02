@@ -7,6 +7,8 @@ using UnityEngine.Serialization;
 
 public class Animatronic : MonoBehaviour
 {
+    public new string name;
+
     [SerializeField] Transform[] paths;
 
     public Place animatronicPlace { get; set; }
@@ -45,11 +47,13 @@ public class Animatronic : MonoBehaviour
     // Update is called once per frame
     protected void AnimatronicLoop()
     {
-        bool playerAtDoor = PlayerController.Instance.currentPlace == animatronicPlace;
-        bool playerLightOpen = PlayerController.Instance.flashlight.lightOpen;
+        PlayerController player = PlayerController.Instance;
+
+        bool playerAtPlace = player.currentPlace == animatronicPlace;
+        bool playerLightOpen = player.flashlight.lightOpen;
         bool placeDoorOpen = animatronicPlace.door.isOpen;
 
-        bool playerArmedAtDoor = playerAtDoor &&
+        bool playerArmedAtDoor = playerAtPlace &&
                         playerLightOpen
                         && placeDoorOpen; // If the player is at this animatronics' door while the door is open and the light is on
 
@@ -65,14 +69,22 @@ public class Animatronic : MonoBehaviour
 
                 currentJumpscareTime = Random.Range(jumpscareWaitMinMax.x, jumpscareWaitMinMax.y);
                 jumpscareTimer = 0f;
-                //Debug.Log("Jumpscare mode initiated");
+                Debug.Log($"({name}): Jumpscare mode initiated");
             }
 
-            if (playerArmedAtDoor || jumpscareTimer > currentJumpscareTime) // If too much time passed before player could reset the animatronic or if the player turned on the light directly at the animatronic's face (dumbass)
+            if (jumpscareTimer > currentJumpscareTime)
             {
-                Jumpscare();
-                //Debug.Log("2");
+                if (playerArmedAtDoor || (player.currentPlace == GameManager.Places[0]))
+                {
+                    Jumpscare();
+                    //Debug.Log("2");
+                }
+                else
+                {
+                    Debug.Log($"({name}): Player is either at door without flashlight being open, or not at the default place");
+                }
             }
+
             else
             {
                 //Debug.Log("1");
@@ -88,23 +100,23 @@ public class Animatronic : MonoBehaviour
                     // Action
                     float action = Random.Range(0f, 1f) * 100f;
 
-                    //Debug.Log("Prob: " + action);
+                    Debug.Log($"({name}): Probability: " + action);
 
                     if (action < movingProbabilities.x)
                     {
-                        //Debug.Log("Bonnie going forward");
+                        Debug.Log($"({name}): Going forward");
 
                         currentPlaceIndex += 1;
 
                     }
                     else if (action < movingProbabilities.x + movingProbabilities.y)
                     {
-                        //Debug.Log("Bonnie going backward");
+                        Debug.Log($"({name}): Going backward");
                         currentPlaceIndex -= 1;
                     }
                     else
                     {
-                        //Debug.Log("Bonnie staying");
+                        Debug.Log($"({name}): Staying");
                     }
 
                     currentPlaceIndex = Mathf.Clamp(currentPlaceIndex, 0, paths.Length);
@@ -131,7 +143,7 @@ public class Animatronic : MonoBehaviour
 
     public void Jumpscare()
     {
-        Debug.Log("BOOO! Jumpscared");
+        Debug.Log($"({name}): Jumpscared");
         this.enabled = false;
         GameManager.Instance.GameFadeOut(2f);
     }

@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     public Door currentDoor { get { return currentPlace.door; } }
     PlaceTrigger currentPlaceTrigger;
 
+    bool holdingDoor = false;
+
     private void Awake()
     {
         Instance = this;
@@ -184,14 +186,9 @@ public class PlayerController : MonoBehaviour
                             if (currentPlaceTrigger != null) currentPlaceTrigger.gameObject.SetActive(true);
 
                             if (currentDoor != null) currentDoor.Toggle(true);
-                            //currentPlace.door = null;
 
-                            currentPlace = place;
                             currentPlaceTrigger = trigger;
                             currentPlaceTrigger.gameObject.SetActive(false);
-
-                            xClamp = currentPlace.xClamp;
-                            yClamp = currentPlace.yClamp;
 
                             MoveToPlace(place);
                             break;
@@ -200,14 +197,26 @@ public class PlayerController : MonoBehaviour
                 }
                 else if(currentPlace.door != null)
                 {
-                    currentDoor.Toggle(!currentDoor.isOpen);
-
-                    if (!currentDoor.isOpen && currentPlace.animatronic.atLastPhase)
+                    if (!holdingDoor)
                     {
-                        currentPlace.animatronic.ResetJumpscare();
-                    }
+                        holdingDoor = true;
+                        currentDoor.Toggle(false);
+
+                        flashlight.TurnLight(false);
+                        flashlight.controlEnabled = false;
+                    }                   
                 }
             }  
+        }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            if (holdingDoor)
+            {
+                holdingDoor = false;
+                currentDoor.Toggle(true);
+                flashlight.controlEnabled = true;
+            }
         }
     }
 
@@ -237,6 +246,11 @@ public class PlayerController : MonoBehaviour
         }
 
         transform.position = place.Transform.position;
+
+        currentPlace = place;
+
+        xClamp = currentPlace.xClamp;
+        yClamp = currentPlace.yClamp;
 
         UIManager.Instance.playerActionPanel.SetActive(false);
         UIManager.Instance.playerActionText.text = "";

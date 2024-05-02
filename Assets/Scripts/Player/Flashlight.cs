@@ -7,6 +7,7 @@ public class Flashlight : MonoBehaviour
     [SerializeField][Range(0f, 1f)] float cameraFollowSpeed = 0.5f;
     public KeyCode flashlightKey = KeyCode.Mouse1;
     public bool lightOpen { get { return light.enabled; } }
+    public bool controlEnabled { get; set; } = true;
     [SerializeField] float xOffset, yOffset, zOffset;
     new Light light;
 
@@ -28,7 +29,7 @@ public class Flashlight : MonoBehaviour
         TrackCamera();
 
         // Turn on or off
-        if (Input.GetKeyDown(flashlightKey))
+        if (controlEnabled && Input.GetKeyDown(flashlightKey))
         {
             TurnLight(!lightOpen);
         }
