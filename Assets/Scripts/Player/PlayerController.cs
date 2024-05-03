@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
 
     public bool isOn {  get; private set; }
 
-    
+    [SerializeField] Animator animator;
 
     // Public settings, will be adjustable from the game settings
     public Vector2 mouseSensitivity;
@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         SetControlState(true);
+        animator.enabled = false;
 
         currentPlace = GameManager.Places[0]; // Ensure that the default place is at index 0
 
@@ -68,7 +69,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void SetControlState(bool state)
+    public void SetControlState(bool state, bool setAnimator = true)
     {
         isOn = state;
     }
@@ -190,6 +191,8 @@ public class PlayerController : MonoBehaviour
                             currentPlaceTrigger = trigger;
                             currentPlaceTrigger.gameObject.SetActive(false);
 
+                            StopAllCoroutines();
+
                             MoveToPlace(place);
                             break;
                         }
@@ -229,21 +232,32 @@ public class PlayerController : MonoBehaviour
     IEnumerator IEMoveToPlace(Place place, float waitTime = 1f)
     {
         SetControlState(false);
-
         flashlight.TurnLight(false);
 
-        float timer = 0f;
+        animator.enabled = true; 
 
-        while (timer < 1f)
+        string tag = currentPlace.Name + " to " + place.Name;
+        animator.Play(tag, 0, 0f);
+
+        yield return null;
+
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
         {
-            timer += Time.deltaTime;
-
             // Animation will be here, replace this stuff
-            UIManager.Instance.playerActionPanel.SetActive(true);
-            UIManager.Instance.playerActionText.text = "Moving to " + place.Name + ", animation playing"; 
+            //UIManager.Instance.playerActionPanel.SetActive(true);
+            //UIManager.Instance.playerActionText.text = "Moving to " + place.Name + ", animation playing"; 
+
+            //Debug.Log("ANým: " + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
+
+            
 
             yield return null;
         }
+      
+        animator.enabled = false; 
+
+        playerEuler = transform.localEulerAngles;
+        cameraEuler = camera.localEulerAngles;
 
         transform.position = place.Transform.position;
 
@@ -252,9 +266,9 @@ public class PlayerController : MonoBehaviour
         xClamp = currentPlace.xClamp;
         yClamp = currentPlace.yClamp;
 
+        SetControlState(true);
+
         UIManager.Instance.playerActionPanel.SetActive(false);
         UIManager.Instance.playerActionText.text = "";
-
-        SetControlState(true);
     }
 }

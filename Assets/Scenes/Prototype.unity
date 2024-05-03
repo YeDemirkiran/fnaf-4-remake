@@ -6561,6 +6561,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1283598719}
   - component: {fileID: 1283598720}
+  - component: {fileID: 1283598721}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -6597,12 +6598,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df933e92d57e710448f4008887701879, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1283598721}
   mouseSensitivity: {x: 200, y: -150}
   smoothClamp: 1
   smoothRatio: 0.1
   camera: {fileID: 330585546}
   flashlight: {fileID: 2029039937}
   eyelidsAnimator: {fileID: 683216522}
+--- !u!95 &1283598721
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1283598715}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 77b9501f717a0ae41993d9c07e6580c8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1318532915
 GameObject:
   m_ObjectHideFlags: 0
