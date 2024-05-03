@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
 
     bool holdingDoor = false;
 
+    Vector3 lerpEuler; public void SetEuler(float x, float y) { lerpEuler.x = x; }
+
     private void Awake()
     {
         Instance = this;
@@ -240,6 +242,8 @@ public class PlayerController : MonoBehaviour
         animator.Play(tag, 0, 0f);
 
         yield return null;
+
+        Debug.Log("Temp euler: " + lerpEuler);
 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
         {
