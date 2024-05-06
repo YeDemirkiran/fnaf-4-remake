@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
     bool holdingDoor = false;
 
-    Vector3 lerpEuler; public void SetEuler(float x, float y) { lerpEuler.x = x; }
+    [SerializeField] float animationLerpTime = 0.25f;
 
     private void Awake()
     {
@@ -233,17 +233,58 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator IEMoveToPlace(Place place, float waitTime = 1f)
     {
-        SetControlState(false);
-        flashlight.TurnLight(false);
+        SetControlState(false);   
+
+        // Let me explain what's going on here
+        // I couldn't find another way to get the rotation information from the first frame of an animation
+        // To make a smooth lerp into the animation, we first play the animation which updates the Camera euler angles
+        // Then we stop the animation, lerp to that angle information we got and then start the animation again when the lerp is done
+
+        //Debug.Log("Before: " + camera.localEulerAngles);
 
         animator.enabled = true; 
 
         string tag = currentPlace.Name + " to " + place.Name;
         animator.Play(tag, 0, 0f);
 
+        //Debug.Break();
+        // Wait for a frame and let the animator update the transforms
         yield return null;
+        //Debug.Break();
 
-        Debug.Log("Temp euler: " + lerpEuler);
+        // Store the target rotations
+        Quaternion bodyTarget = transform.localRotation;
+        Quaternion cameraTarget = camera.localRotation;
+
+        //Debug.Log("After: " + camera.localEulerAngles);
+
+        // Reset animators
+        animator.enabled = false;
+        transform.localEulerAngles = playerEuler;
+        camera.localEulerAngles = cameraEuler;
+
+        // Store initials for lerping
+        Quaternion bodyInitial = transform.localRotation;
+        Quaternion cameraInitial = camera.localRotation;
+
+        float lerp = 0f;
+
+        while (lerp < 1f) 
+        {
+            transform.localRotation = Quaternion.Lerp(bodyInitial, bodyTarget, lerp);
+            camera.localRotation = Quaternion.Lerp(cameraInitial, cameraTarget, lerp);
+            lerp += Time.deltaTime / animationLerpTime;
+            yield return null;
+        }
+
+        //Debug.Log("After 2: " + camera.localEulerAngles);
+
+        flashlight.TurnLight(false);
+
+        animator.enabled = true;
+        animator.Play(tag, 0, 0f);
+
+        //Debug.Break();
 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
         {
