@@ -11,9 +11,14 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] Animator animator;
 
-    // Public settings, will be adjustable from the game settings
-    public Vector2 mouseSensitivity;
+    // Private
+    Vector3 playerEuler, cameraEuler;
+    bool holdingDoor = false;
     Vector2 currentSensitivity;
+
+    // Public variables, will be adjustable from the game settings
+    [Header("Controller")]
+    public Vector2 mouseSensitivity;
 
     public Vector2 xClamp {  get; set; }
     public Vector2 yClamp { get; set; }
@@ -21,11 +26,8 @@ public class PlayerController : MonoBehaviour
     public bool smoothClamp = true;
     [Range(0f, 1f)] public float smoothRatio = 0.10f; // 10 percent
 
-
     [SerializeField] new Transform camera;
-    public Flashlight flashlight;
-
-    Vector3 playerEuler, cameraEuler;
+    public Flashlight flashlight; 
 
     [Header("Eyelids")]
     [SerializeField] Animator eyelidsAnimator;
@@ -34,9 +36,11 @@ public class PlayerController : MonoBehaviour
     public Door currentDoor { get { return currentPlace.door; } }
     PlaceTrigger currentPlaceTrigger;
 
-    bool holdingDoor = false;
+    
 
-    [SerializeField] float animationLerpTime = 0.25f;
+    [Header("Animation")]
+
+    [SerializeField] float animationLerpSpeed = 5f;
 
     private void Awake()
     {
@@ -240,23 +244,17 @@ public class PlayerController : MonoBehaviour
         // To make a smooth lerp into the animation, we first play the animation which updates the Camera euler angles
         // Then we stop the animation, lerp to that angle information we got and then start the animation again when the lerp is done
 
-        //Debug.Log("Before: " + camera.localEulerAngles);
-
         animator.enabled = true; 
 
         string tag = currentPlace.Name + " to " + place.Name;
         animator.Play(tag, 0, 0f);
 
-        //Debug.Break();
         // Wait for a frame and let the animator update the transforms
         yield return null;
-        //Debug.Break();
 
         // Store the target rotations
         Quaternion bodyTarget = transform.localRotation;
         Quaternion cameraTarget = camera.localRotation;
-
-        //Debug.Log("After: " + camera.localEulerAngles);
 
         // Reset animators
         animator.enabled = false;
@@ -271,45 +269,39 @@ public class PlayerController : MonoBehaviour
 
         while (lerp < 1f) 
         {
-            transform.localRotation = Quaternion.Lerp(bodyInitial, bodyTarget, lerp);
-            camera.localRotation = Quaternion.Lerp(cameraInitial, cameraTarget, lerp);
-            lerp += Time.deltaTime / animationLerpTime;
+            transform.localRotation = Quaternion.Slerp(bodyInitial, bodyTarget, lerp);
+            camera.localRotation = Quaternion.Slerp(cameraInitial, cameraTarget, lerp);
+            lerp += Time.deltaTime * animationLerpSpeed;
             yield return null;
         }
-
-        //Debug.Log("After 2: " + camera.localEulerAngles);
 
         flashlight.TurnLight(false);
 
         animator.enabled = true;
         animator.Play(tag, 0, 0f);
 
-        //Debug.Break();
-
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f)
         {
             // Animation will be here, replace this stuff
             //UIManager.Instance.playerActionPanel.SetActive(true);
             //UIManager.Instance.playerActionText.text = "Moving to " + place.Name + ", animation playing"; 
-
-            //Debug.Log("ANým: " + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-
-            
-
             yield return null;
         }
       
-        animator.enabled = false; 
-
-        playerEuler = transform.localEulerAngles;
-        cameraEuler = camera.localEulerAngles;
-
-        transform.position = place.Transform.position;
+        animator.enabled = false;
 
         currentPlace = place;
 
         xClamp = currentPlace.xClamp;
         yClamp = currentPlace.yClamp;
+
+        Debug.Log("player before: " + playerEuler);
+        Debug.Log("camera before: " + cameraEuler);
+        transform.position = place.Transform.position;
+        playerEuler = transform.localEulerAngles;
+        cameraEuler = camera.localEulerAngles;
+        Debug.Log("player after: " + playerEuler);
+        Debug.Log("camera after: " + cameraEuler);
 
         SetControlState(true);
 
